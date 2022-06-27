@@ -59,7 +59,7 @@
     "resources": [
       {
         "alwaysLoaded": false,
-        "file": "tile.png",
+        "file": "assets/tile.png",
         "kind": "image",
         "metadata": "",
         "name": "tile.png",
@@ -68,7 +68,7 @@
       },
       {
         "alwaysLoaded": false,
-        "file": "tile_bg.png",
+        "file": "assets/tile_bg.png",
         "kind": "image",
         "metadata": "",
         "name": "tile_bg.png",
@@ -77,7 +77,7 @@
       },
       {
         "alwaysLoaded": false,
-        "file": "trampoline.png",
+        "file": "assets/trampoline.png",
         "kind": "image",
         "metadata": "",
         "name": "trampoline.png",
@@ -86,7 +86,7 @@
       },
       {
         "alwaysLoaded": false,
-        "file": "block.png",
+        "file": "assets/block.png",
         "kind": "image",
         "metadata": "",
         "name": "block.png",
@@ -95,7 +95,7 @@
       },
       {
         "alwaysLoaded": false,
-        "file": "light_tile.png",
+        "file": "assets/light_tile.png",
         "kind": "image",
         "metadata": "",
         "name": "light_tile.png",
@@ -104,7 +104,7 @@
       },
       {
         "alwaysLoaded": false,
-        "file": "player.png",
+        "file": "assets/player.png",
         "kind": "image",
         "metadata": "",
         "name": "player.png",
@@ -113,7 +113,7 @@
       },
       {
         "alwaysLoaded": false,
-        "file": "sky.png",
+        "file": "assets/sky.png",
         "kind": "image",
         "metadata": "",
         "name": "sky.png",
@@ -122,7 +122,7 @@
       },
       {
         "alwaysLoaded": false,
-        "file": "particle.png",
+        "file": "assets/particle.png",
         "kind": "image",
         "metadata": "",
         "name": "particle.png",
@@ -131,7 +131,7 @@
       },
       {
         "alwaysLoaded": false,
-        "file": "pointer.png",
+        "file": "assets/pointer.png",
         "kind": "image",
         "metadata": "",
         "name": "pointer.png",
@@ -140,7 +140,7 @@
       },
       {
         "alwaysLoaded": false,
-        "file": "block_place.png",
+        "file": "assets/block_place.png",
         "kind": "image",
         "metadata": "",
         "name": "block_place.png",
@@ -149,7 +149,7 @@
       },
       {
         "alwaysLoaded": false,
-        "file": "cube.png",
+        "file": "assets/cube.png",
         "kind": "image",
         "metadata": "",
         "name": "cube.png",
@@ -158,7 +158,7 @@
       },
       {
         "alwaysLoaded": false,
-        "file": "block_place_trigger.png",
+        "file": "assets/block_place_trigger.png",
         "kind": "image",
         "metadata": "",
         "name": "block_place_trigger.png",
@@ -174,7 +174,7 @@
       },
       {
         "alwaysLoaded": false,
-        "file": "player_spawn.png",
+        "file": "assets/player_spawn.png",
         "kind": "image",
         "metadata": "",
         "name": "player_spawn.png",
@@ -183,7 +183,7 @@
       },
       {
         "alwaysLoaded": false,
-        "file": "end-1-0.png",
+        "file": "assets/end-1-0.png",
         "kind": "image",
         "metadata": "",
         "name": "end.png",
@@ -192,7 +192,7 @@
       },
       {
         "alwaysLoaded": false,
-        "file": "reset_trigger.png",
+        "file": "assets/reset_trigger.png",
         "kind": "image",
         "metadata": "",
         "name": "reset_trigger.png",
@@ -2208,7 +2208,7 @@
               },
               "parameters": [
                 "",
-                "\"1\""
+                "\"level1\""
               ]
             },
             {
@@ -3167,7 +3167,7 @@
         "gridColor": 0,
         "gridAlpha": 0.25,
         "snap": true,
-        "zoomFactor": 0.1893433784484862,
+        "zoomFactor": 0.7002533102989197,
         "windowMask": false
       },
       "objectsGroups": [
@@ -3882,7 +3882,7 @@
               "folded": true,
               "name": "destination",
               "type": "string",
-              "value": "test"
+              "value": "leveltest"
             }
           ]
         },
@@ -3926,7 +3926,7 @@
           "locked": false,
           "name": "NewText",
           "persistentUuid": "6e555520-8be1-43d4-9b85-14ce72dd8585",
-          "width": 119,
+          "width": 192,
           "x": 832,
           "y": 384,
           "zOrder": 173,
@@ -4164,7 +4164,7 @@
           "variables": [],
           "effects": [],
           "behaviors": [],
-          "string": "Jump with W.",
+          "string": "Jump with W.\n(space or up arrow)",
           "font": "",
           "characterSize": 20,
           "color": {
@@ -4185,7 +4185,7 @@
           "variables": [],
           "effects": [],
           "behaviors": [],
-          "string": "Walk with A and D.",
+          "string": "Walk with A and D.\n(or arrow keys)",
           "font": "",
           "characterSize": 20,
           "color": {
@@ -17026,7 +17026,7 @@
   ],
   "externalEvents": [
     {
-      "associatedLayout": "1",
+      "associatedLayout": "level1",
       "lastChangeTimeStamp": 0,
       "name": "Engine",
       "events": [
@@ -17315,21 +17315,38 @@
               "conditions": [
                 {
                   "type": {
-                    "value": "KeyPressed"
-                  },
-                  "parameters": [
-                    "",
-                    "a"
-                  ]
-                },
-                {
-                  "type": {
                     "value": "ObjectVariableAsBoolean"
                   },
                   "parameters": [
                     "player",
                     "can_walk",
                     "True"
+                  ]
+                },
+                {
+                  "type": {
+                    "value": "BuiltinCommonInstructions::Or"
+                  },
+                  "parameters": [],
+                  "subInstructions": [
+                    {
+                      "type": {
+                        "value": "KeyPressed"
+                      },
+                      "parameters": [
+                        "",
+                        "a"
+                      ]
+                    },
+                    {
+                      "type": {
+                        "value": "KeyPressed"
+                      },
+                      "parameters": [
+                        "",
+                        "Left"
+                      ]
+                    }
                   ]
                 }
               ],
@@ -17392,21 +17409,38 @@
               "conditions": [
                 {
                   "type": {
-                    "value": "KeyPressed"
-                  },
-                  "parameters": [
-                    "",
-                    "d"
-                  ]
-                },
-                {
-                  "type": {
                     "value": "ObjectVariableAsBoolean"
                   },
                   "parameters": [
                     "player",
                     "can_walk",
                     "True"
+                  ]
+                },
+                {
+                  "type": {
+                    "value": "BuiltinCommonInstructions::Or"
+                  },
+                  "parameters": [],
+                  "subInstructions": [
+                    {
+                      "type": {
+                        "value": "KeyPressed"
+                      },
+                      "parameters": [
+                        "",
+                        "d"
+                      ]
+                    },
+                    {
+                      "type": {
+                        "value": "KeyPressed"
+                      },
+                      "parameters": [
+                        "",
+                        "Right"
+                      ]
+                    }
                   ]
                 }
               ],
@@ -17492,11 +17526,37 @@
                 },
                 {
                   "type": {
-                    "value": "KeyPressed"
+                    "value": "BuiltinCommonInstructions::Or"
                   },
-                  "parameters": [
-                    "",
-                    "w"
+                  "parameters": [],
+                  "subInstructions": [
+                    {
+                      "type": {
+                        "value": "KeyPressed"
+                      },
+                      "parameters": [
+                        "",
+                        "w"
+                      ]
+                    },
+                    {
+                      "type": {
+                        "value": "KeyPressed"
+                      },
+                      "parameters": [
+                        "",
+                        "Up"
+                      ]
+                    },
+                    {
+                      "type": {
+                        "value": "KeyPressed"
+                      },
+                      "parameters": [
+                        "",
+                        "Space"
+                      ]
+                    }
                   ]
                 },
                 {
