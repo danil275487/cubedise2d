@@ -1,0 +1,58 @@
+[gd_scene load_steps=3 format=3 uid="uid://b6ktvg2qj7o0j"]
+
+[ext_resource type="Texture2D" uid="uid://v7defs4bo5si" path="res://assets/arrow.png" id="1_ko38y"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_30dbq"]
+radius = 128.0
+
+[node name="touch" type="CanvasLayer"]
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 32.0
+offset_top = -160.0
+offset_right = 320.0
+offset_bottom = -32.0
+grow_vertical = 0
+
+[node name="left" type="TouchScreenButton" parent="Control"]
+scale = Vector2(0.5, 0.5)
+texture_normal = ExtResource("1_ko38y")
+shape = SubResource("CircleShape2D_30dbq")
+action = "left"
+visibility_mode = 1
+
+[node name="right" type="TouchScreenButton" parent="Control"]
+position = Vector2(288, 128)
+rotation = 3.14159
+scale = Vector2(0.5, 0.5)
+texture_normal = ExtResource("1_ko38y")
+shape = SubResource("CircleShape2D_30dbq")
+action = "right"
+visibility_mode = 1
+
+[node name="Control2" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -160.0
+offset_top = -160.0
+offset_right = -32.0
+offset_bottom = -32.0
+grow_horizontal = 0
+grow_vertical = 0
+
+[node name="up" type="TouchScreenButton" parent="Control2"]
+position = Vector2(128, 0)
+rotation = 1.5708
+scale = Vector2(0.5, 0.5)
+texture_normal = ExtResource("1_ko38y")
+shape = SubResource("CircleShape2D_30dbq")
+action = "jump"
+visibility_mode = 1

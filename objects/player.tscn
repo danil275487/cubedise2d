@@ -84,6 +84,8 @@ func _process(delta):
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_2tt0w"]
 gradient = SubResource("Gradient_iuqu7")
+width = 800
+height = 1800
 fill_to = Vector2(0, 1)
 
 [node name="player" type="CharacterBody2D"]
