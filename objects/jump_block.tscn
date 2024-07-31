@@ -1,0 +1,76 @@
+[gd_scene load_steps=9 format=3 uid="uid://clkcg1hko77ai"]
+
+[ext_resource type="Texture2D" uid="uid://cb85prudheun8" path="res://assets/cube.png" id="1_ujxm2"]
+
+[sub_resource type="Gradient" id="Gradient_4wf0m"]
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_hyqry"]
+gradient = SubResource("Gradient_4wf0m")
+fill = 2
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0, 1)
+metadata/_snap_enabled = true
+
+[sub_resource type="Environment" id="Environment_dxom7"]
+background_mode = 3
+glow_enabled = true
+glow_levels/5 = 0.0
+glow_normalized = true
+glow_strength = 2.0
+glow_blend_mode = 0
+glow_hdr_threshold = 3.0
+glow_hdr_scale = 4.0
+glow_map_strength = 0.75
+glow_map = SubResource("GradientTexture2D_hyqry")
+adjustment_enabled = true
+adjustment_brightness = 0.5
+
+[sub_resource type="Gradient" id="Gradient_ejorp"]
+offsets = PackedFloat32Array(0.4, 0.6)
+colors = PackedColorArray(0.5, 1.5, 0.5, 1, 0.501961, 1.50196, 0.501961, 0)
+metadata/_snap_enabled = true
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_dpiyw"]
+gradient = SubResource("Gradient_ejorp")
+width = 16
+height = 16
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0, 0.1)
+metadata/_snap_enabled = true
+
+[sub_resource type="Curve" id="Curve_3lvne"]
+max_value = 0.25
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.5, 0.25), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+metadata/_snap_enabled = true
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_jc2ur"]
+size = Vector2(64, 64)
+
+[node name="StaticBody2D" type="StaticBody2D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_dxom7")
+
+[node name="CPUParticles2D" type="CPUParticles2D" parent="."]
+amount = 50
+lifetime = 5.0
+texture = SubResource("GradientTexture2D_dpiyw")
+emission_shape = 3
+emission_rect_extents = Vector2(48, 48)
+spread = 180.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 10.0
+initial_velocity_max = 10.0
+scale_amount_min = 0.0
+scale_amount_curve = SubResource("Curve_3lvne")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_jc2ur")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+modulate = Color(0.5, 1.5, 0.5, 1)
+scale = Vector2(0.25, 0.25)
+texture = ExtResource("1_ujxm2")

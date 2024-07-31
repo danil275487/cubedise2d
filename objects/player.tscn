@@ -1,0 +1,192 @@
+[gd_scene load_steps=10 format=3 uid="uid://crmrv3gs41vor"]
+
+[ext_resource type="Texture2D" uid="uid://mlyxo1s5eu5c" path="res://assets/player.png" id="2_vk5xg"]
+[ext_resource type="Texture2D" uid="uid://v7defs4bo5si" path="res://assets/arrow.png" id="3_su5ou"]
+
+[sub_resource type="GDScript" id="GDScript_skxay"]
+resource_name = "player"
+script/source = "extends CharacterBody2D
+
+
+const SPEED = 20.0
+const MAX_SPEED = 300.0
+const JUMP_VELOCITY = -400.0
+
+# Get the gravity from the project settings to be synced with RigidBody nodes.
+var gravity = ProjectSettings.get_setting(\"physics/2d/default_gravity\")
+
+
+func _physics_process(delta):
+	# Add the gravity.
+	if not is_on_floor():
+		velocity.y += gravity * delta
+
+	# Handle jump.
+	if Input.is_action_just_pressed(\"jump\") and is_on_floor():
+		velocity.y = JUMP_VELOCITY
+
+	# Get the input direction and handle the movement/deceleration.
+	# As good practice, you should replace UI actions with custom gameplay actions.
+	var direction = Input.get_axis(\"left\", \"right\")
+	if direction:
+		velocity.x += direction * SPEED
+		if abs(velocity.x) > MAX_SPEED:
+			velocity.x = direction * MAX_SPEED
+	else:
+		velocity.x = move_toward(velocity.x, 0, SPEED)
+
+	move_and_slide()
+"
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_6qysq"]
+radius = 32.0
+height = 144.0
+
+[sub_resource type="GDScript" id="GDScript_qnin8"]
+script/source = "@tool
+extends CanvasLayer
+
+func _process(delta):
+	if Engine.is_editor_hint():
+		visible = false
+	else:
+		visible = true
+"
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_30dbq"]
+radius = 128.0
+
+[sub_resource type="GDScript" id="GDScript_ummhs"]
+resource_name = "debug_label"
+script/source = "extends Label
+
+
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	pass # Replace with function body.
+
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta):
+	const ftext = \"\"\"fps: %s
+	position: %s
+	velocity: %s
+	\"\"\"
+	
+	text = ftext % [
+		Engine.get_frames_per_second(),
+		get_node('../../../../player/').position,
+		get_node('../../../../player/').velocity,
+	]
+"
+
+[sub_resource type="Gradient" id="Gradient_iuqu7"]
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_2tt0w"]
+gradient = SubResource("Gradient_iuqu7")
+fill_to = Vector2(0, 1)
+
+[node name="player" type="CharacterBody2D"]
+script = SubResource("GDScript_skxay")
+
+[node name="collision" type="CollisionShape2D" parent="."]
+shape = SubResource("CapsuleShape2D_6qysq")
+
+[node name="sprite" type="Sprite2D" parent="."]
+modulate = Color(0.88, 0.88, 0.88, 1)
+scale = Vector2(0.25, 0.255)
+texture = ExtResource("2_vk5xg")
+
+[node name="camera" type="Camera2D" parent="."]
+process_callback = 0
+limit_smoothed = true
+position_smoothing_enabled = true
+position_smoothing_speed = 4.0
+editor_draw_screen = false
+
+[node name="hud" type="CanvasLayer" parent="."]
+visible = false
+script = SubResource("GDScript_qnin8")
+
+[node name="touch" type="Control" parent="hud"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Container" type="Container" parent="hud/touch"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -192.0
+offset_right = 352.0
+grow_vertical = 0
+
+[node name="right" type="TouchScreenButton" parent="hud/touch/Container"]
+position = Vector2(320, 160)
+rotation = 3.14159
+scale = Vector2(0.5, 0.5)
+texture_normal = ExtResource("3_su5ou")
+shape = SubResource("CircleShape2D_30dbq")
+action = "right"
+visibility_mode = 1
+
+[node name="left" type="TouchScreenButton" parent="hud/touch/Container"]
+position = Vector2(32, 32)
+scale = Vector2(0.5, 0.5)
+texture_normal = ExtResource("3_su5ou")
+shape = SubResource("CircleShape2D_30dbq")
+action = "left"
+visibility_mode = 1
+
+[node name="Container2" type="Container" parent="hud/touch"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -192.0
+offset_top = -192.0
+grow_horizontal = 0
+grow_vertical = 0
+
+[node name="up" type="TouchScreenButton" parent="hud/touch/Container2"]
+position = Vector2(160, 32)
+rotation = 1.5708
+scale = Vector2(0.5, 0.5)
+texture_normal = ExtResource("3_su5ou")
+shape = SubResource("CircleShape2D_30dbq")
+action = "jump"
+visibility_mode = 1
+
+[node name="debug" type="Control" parent="hud"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="debug_label" type="Label" parent="hud/debug"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.25098)
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/shadow_outline_size = 2
+theme_override_constants/line_spacing = -4
+theme_override_font_sizes/font_size = 16
+text = "debug text"
+script = SubResource("GDScript_ummhs")
+
+[node name="ParallaxBackground" type="ParallaxBackground" parent="."]
+follow_viewport_scale = 0.95
+scroll_limit_begin = Vector2(0, -600)
+scroll_limit_end = Vector2(0, 1200)
+
+[node name="Sprite2D" type="Sprite2D" parent="ParallaxBackground"]
+position = Vector2(0, 327.5)
+scale = Vector2(9.07813, 20.6094)
+texture = SubResource("GradientTexture2D_2tt0w")
