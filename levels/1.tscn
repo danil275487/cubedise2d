@@ -1,7 +1,10 @@
-[gd_scene load_steps=33 format=3 uid="uid://c8qc30mk2m1w6"]
+[gd_scene load_steps=38 format=3 uid="uid://c8qc30mk2m1w6"]
 
 [ext_resource type="PackedScene" uid="uid://crmrv3gs41vor" path="res://objects/player.tscn" id="1_u354h"]
 [ext_resource type="PackedScene" uid="uid://clkcg1hko77ai" path="res://objects/jump_block.tscn" id="2_q6247"]
+[ext_resource type="PackedScene" uid="uid://7jawtavkrjq4" path="res://objects/light_block.tscn" id="3_slng5"]
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_80dgm"]
 
 [sub_resource type="GDScript" id="GDScript_2pwwx"]
 resource_name = "blocks"
@@ -9,63 +12,104 @@ script/source = "@tool
 extends StaticBody2D
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
+func add_sprites():
+		for child in get_children():
+			if child.get_child_count() == 0:
+				print('children dont exist, making new one')
+				child.add_child(Sprite2D.new())
+				child.add_child(LightOccluder2D.new())
+				print(child.get_children())
+				if child.get_child_count() > 2:
+					print(child.name, ' HAS TOO MANY CHILDREN!!!! REMOVING CHILDREN!!!!', child.get_children())
+					for child2 in child.get_children():
+						child.remove_child(child2)
+			else:
+				print('child exists')
+''
+func update_sprites():
 	for child in get_children():
-		if child.get_child_count() > 0:
-			pass
-		else:
-			child.add_child(Sprite2D.new())
-			
+		var shape = child.shape.get_rect()
 		var sprite = child.get_child(0)
+		var occuluder = child.get_child(1)
+		
+		if not child.disabled:
+			var material = CanvasItemMaterial.new()
+			material.light_mode = CanvasItemMaterial.LIGHT_MODE_UNSHADED
+			sprite.material = material
+		
 		sprite.texture = load(\"res://assets/cube.png\")
-		if child.disabled:
-			sprite.modulate = Color(0.6, 0.6, 0.6)
-		elif child.one_way_collision:
-			sprite.modulate = Color(0.8, 0.8, 0.8)
-		sprite.scale = Vector2(0.25, 0.25)
 		sprite.texture_repeat = CanvasItem.TEXTURE_REPEAT_ENABLED
+		if child.disabled:
+			sprite.modulate = Color(.5, .5, .5)
+		elif child.one_way_collision:
+			sprite.modulate = Color(.8, .8, .8)
+		sprite.scale = Vector2(.25, .25)
 		sprite.region_enabled = true
-		sprite.region_rect = Rect2(Vector2(0, 0), child.shape.get_size()*4)
+		sprite.region_rect = Rect2(
+			Vector2(0,0),
+			shape.size*4
+		)
+
+		if not child.disabled:
+			var polygon = OccluderPolygon2D.new()
+			polygon.polygon = PackedVector2Array([
+				shape.position,
+				Vector2(shape.position.x, shape.end.y),
+				shape.end,
+				Vector2(shape.end.x, shape.position.y)
+			])
+			occuluder.occluder = polygon
+
+func _on_child_order_changed():
+	add_sprites()
+
+func _ready():
+	add_sprites()
+	update_sprites()
+
+func _process(delta):
+	if Engine.is_editor_hint():
+		update_sprites()
 "
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_au4uk"]
-size = Vector2(128, 320)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_uhru3"]
-size = Vector2(960, 256)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_imxb6"]
-size = Vector2(1024, 448)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_s427t"]
-size = Vector2(768, 192)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_ldt02"]
-size = Vector2(448, 128)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_a2ehk"]
 size = Vector2(768, 384)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_ems7p"]
-size = Vector2(512, 320)
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_uhru3"]
+size = Vector2(960, 256)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_4vd42"]
-size = Vector2(704, 576)
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_au4uk"]
+size = Vector2(128, 320)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_2xd3i"]
-size = Vector2(128, 384)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_47uq1"]
-size = Vector2(64, 320)
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ldt02"]
+size = Vector2(448, 128)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_tx24f"]
 size = Vector2(64, 64)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_on32w"]
-size = Vector2(256, 64)
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_imxb6"]
+size = Vector2(1024, 448)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ems7p"]
+size = Vector2(512, 320)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_s427t"]
+size = Vector2(768, 192)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_2xd3i"]
+size = Vector2(128, 384)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_4vd42"]
+size = Vector2(704, 576)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_47uq1"]
+size = Vector2(64, 320)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_oxx56"]
 size = Vector2(960, 64)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_on32w"]
+size = Vector2(256, 64)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_jbx38"]
 size = Vector2(1152, 64)
@@ -103,11 +147,11 @@ size = Vector2(64, 192)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_tm1q2"]
 size = Vector2(448, 256)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_omvkw"]
-size = Vector2(640, 384)
-
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_wctt7"]
 size = Vector2(128, 128)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_omvkw"]
+size = Vector2(640, 384)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_nn22x"]
 size = Vector2(64, 128)
@@ -115,39 +159,67 @@ size = Vector2(64, 128)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4bocx"]
 size = Vector2(3200, 64)
 
+[sub_resource type="Gradient" id="Gradient_r8q34"]
+offsets = PackedFloat32Array(0.8, 1)
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
+metadata/_snap_enabled = true
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_hyqry"]
+gradient = SubResource("Gradient_r8q34")
+fill = 2
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0, 1)
+metadata/_snap_enabled = true
+
+[sub_resource type="Environment" id="Environment_vgjry"]
+background_mode = 3
+glow_enabled = true
+glow_levels/5 = 0.0
+glow_normalized = true
+glow_strength = 2.0
+glow_blend_mode = 0
+glow_hdr_threshold = 3.0
+glow_hdr_scale = 4.0
+glow_map_strength = 0.7
+glow_map = SubResource("GradientTexture2D_hyqry")
+adjustment_enabled = true
+adjustment_brightness = 0.5
+
 [node name="world" type="Node2D"]
 metadata/_edit_horizontal_guides_ = [288.0]
+metadata/_edit_vertical_guides_ = [5361.0]
 
 [node name="blocks" type="StaticBody2D" parent="."]
+material = SubResource("CanvasItemMaterial_80dgm")
 script = SubResource("GDScript_2pwwx")
 
-[node name="block" type="CollisionShape2D" parent="blocks"]
-position = Vector2(-128, 32)
-shape = SubResource("RectangleShape2D_au4uk")
+[node name="background5" type="CollisionShape2D" parent="blocks"]
+position = Vector2(4224, 688)
+shape = SubResource("RectangleShape2D_a2ehk")
+disabled = true
 
 [node name="background" type="CollisionShape2D" parent="blocks"]
 position = Vector2(416, 0)
 shape = SubResource("RectangleShape2D_uhru3")
 disabled = true
 
-[node name="background2" type="CollisionShape2D" parent="blocks"]
-position = Vector2(1408, -96)
-shape = SubResource("RectangleShape2D_imxb6")
-disabled = true
-
-[node name="background3" type="CollisionShape2D" parent="blocks"]
-position = Vector2(2304, 32)
-shape = SubResource("RectangleShape2D_s427t")
-disabled = true
+[node name="block" type="CollisionShape2D" parent="blocks"]
+position = Vector2(-128, 32)
+shape = SubResource("RectangleShape2D_au4uk")
 
 [node name="background4" type="CollisionShape2D" parent="blocks"]
 position = Vector2(2912, 64)
 shape = SubResource("RectangleShape2D_ldt02")
 disabled = true
 
-[node name="background5" type="CollisionShape2D" parent="blocks"]
-position = Vector2(4224, 688)
-shape = SubResource("RectangleShape2D_a2ehk")
+[node name="platform" type="CollisionShape2D" parent="blocks"]
+position = Vector2(4512, 848)
+shape = SubResource("RectangleShape2D_tx24f")
+one_way_collision = true
+
+[node name="background2" type="CollisionShape2D" parent="blocks"]
+position = Vector2(1408, -96)
+shape = SubResource("RectangleShape2D_imxb6")
 disabled = true
 
 [node name="background6" type="CollisionShape2D" parent="blocks"]
@@ -155,9 +227,9 @@ position = Vector2(5248, 464)
 shape = SubResource("RectangleShape2D_ems7p")
 disabled = true
 
-[node name="background8" type="CollisionShape2D" parent="blocks"]
-position = Vector2(8448, 400)
-shape = SubResource("RectangleShape2D_4vd42")
+[node name="background3" type="CollisionShape2D" parent="blocks"]
+position = Vector2(2304, 32)
+shape = SubResource("RectangleShape2D_s427t")
 disabled = true
 
 [node name="background7" type="CollisionShape2D" parent="blocks"]
@@ -165,13 +237,13 @@ position = Vector2(8032, 496)
 shape = SubResource("RectangleShape2D_2xd3i")
 disabled = true
 
-[node name="background9" type="CollisionShape2D" parent="blocks"]
-position = Vector2(8384, -48)
-shape = SubResource("RectangleShape2D_47uq1")
+[node name="background8" type="CollisionShape2D" parent="blocks"]
+position = Vector2(8448, 400)
+shape = SubResource("RectangleShape2D_4vd42")
 disabled = true
 
-[node name="background10" type="CollisionShape2D" parent="blocks"]
-position = Vector2(8832, -48)
+[node name="background9" type="CollisionShape2D" parent="blocks"]
+position = Vector2(8384, -48)
 shape = SubResource("RectangleShape2D_47uq1")
 disabled = true
 
@@ -183,10 +255,10 @@ shape = SubResource("RectangleShape2D_tx24f")
 position = Vector2(2848, 96)
 shape = SubResource("RectangleShape2D_tx24f")
 
-[node name="platform" type="CollisionShape2D" parent="blocks"]
-position = Vector2(4512, 848)
-shape = SubResource("RectangleShape2D_tx24f")
-one_way_collision = true
+[node name="background10" type="CollisionShape2D" parent="blocks"]
+position = Vector2(8832, -48)
+shape = SubResource("RectangleShape2D_47uq1")
+disabled = true
 
 [node name="block14" type="CollisionShape2D" parent="blocks"]
 position = Vector2(5984, 208)
@@ -196,14 +268,14 @@ shape = SubResource("RectangleShape2D_tx24f")
 position = Vector2(8704, 272)
 shape = SubResource("RectangleShape2D_tx24f")
 
-[node name="block2" type="CollisionShape2D" parent="blocks"]
-position = Vector2(6208, 80)
-shape = SubResource("RectangleShape2D_on32w")
-
 [node name="block9" type="CollisionShape2D" parent="blocks"]
 position = Vector2(3456, 560)
 rotation = 0.785398
 shape = SubResource("RectangleShape2D_oxx56")
+
+[node name="block2" type="CollisionShape2D" parent="blocks"]
+position = Vector2(6208, 80)
+shape = SubResource("RectangleShape2D_on32w")
 
 [node name="block10" type="CollisionShape2D" parent="blocks"]
 position = Vector2(4416, 912)
@@ -228,6 +300,11 @@ shape = SubResource("RectangleShape2D_gxshx")
 [node name="block23" type="CollisionShape2D" parent="blocks"]
 position = Vector2(8352, 272)
 shape = SubResource("RectangleShape2D_ciu8q")
+
+[node name="block27" type="CollisionShape2D" parent="blocks"]
+position = Vector2(8608, 80)
+shape = SubResource("RectangleShape2D_ciu8q")
+one_way_collision = true
 
 [node name="block26" type="CollisionShape2D" parent="blocks"]
 position = Vector2(8608, -240)
@@ -278,13 +355,13 @@ one_way_collision = true
 position = Vector2(8640, 624)
 shape = SubResource("RectangleShape2D_tm1q2")
 
-[node name="block13" type="CollisionShape2D" parent="blocks"]
-position = Vector2(5824, 432)
-shape = SubResource("RectangleShape2D_omvkw")
-
 [node name="block15" type="CollisionShape2D" parent="blocks"]
 position = Vector2(6080, 176)
 shape = SubResource("RectangleShape2D_wctt7")
+
+[node name="block13" type="CollisionShape2D" parent="blocks"]
+position = Vector2(5824, 432)
+shape = SubResource("RectangleShape2D_omvkw")
 
 [node name="block7" type="CollisionShape2D" parent="blocks"]
 position = Vector2(2144, -128)
@@ -315,5 +392,23 @@ shape = SubResource("RectangleShape2D_4bocx")
 position = Vector2(496, -224)
 floor_max_angle = 0.523599
 
-[node name="StaticBody2D" parent="." instance=ExtResource("2_q6247")]
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_vgjry")
+
+[node name="CanvasModulate" type="CanvasModulate" parent="."]
+color = Color(0.3, 0.3, 0.3, 1)
+
+[node name="DirectionalLight2D" type="DirectionalLight2D" parent="."]
+rotation = 0.174533
+shadow_enabled = true
+shadow_filter = 2
+shadow_filter_smooth = 4.0
+
+[node name="jump_block" parent="." instance=ExtResource("2_q6247")]
+position = Vector2(6368, 80)
+
+[node name="jump_block2" parent="." instance=ExtResource("2_q6247")]
 position = Vector2(5472, 528)
+
+[node name="light_block" parent="." instance=ExtResource("3_slng5")]
+position = Vector2(8576, 464)

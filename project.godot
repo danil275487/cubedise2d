@@ -72,5 +72,5 @@ debug={
 
 textures/canvas_textures/default_texture_filter=2
 renderer/rendering_method="mobile"
-environment/defaults/default_clear_color=Color(0, 0, 0, 1)
+environment/defaults/default_clear_color=Color(0.392, 0.663, 0.93, 1)
 viewport/hdr_2d=true

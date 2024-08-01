@@ -1,15 +1,18 @@
-[gd_scene load_steps=3 format=3 uid="uid://cd1mkfa272rvq"]
+[gd_scene load_steps=2 format=3 uid="uid://cd1mkfa272rvq"]
 
-[ext_resource type="Script" path="res://main.gd" id="1_v26o8"]
-<<<<<<< HEAD
+[sub_resource type="GDScript" id="GDScript_e0s71"]
+script/source = "extends Control
 
-[sub_resource type="Theme" id="Theme_rvycm"]
-Button/colors/font_color = Color(1, 1, 1, 1)
-Button/font_sizes/font_size = 48
-Label/font_sizes/font_size = 72
-=======
-[ext_resource type="Theme" uid="uid://cr6f2ccdt3e0o" path="res://main.tres" id="2_44b36"]
->>>>>>> b4f1820d038052d6fb6b04e1d3dafe5868f3cf6f
+func _on_quit_pressed():
+	get_tree().change_scene_to_file(\"res://levels/1.tscn\")
+
+func _on_select_level_pressed():
+	pass # Replace with function body.
+
+
+func _on_new_game_pressed():
+	get_tree().quit()
+"
 
 [node name="Control" type="Control"]
 layout_mode = 3
@@ -18,157 +21,51 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_v26o8")
+script = SubResource("GDScript_e0s71")
 
-<<<<<<< HEAD
 [node name="buttons" type="VBoxContainer" parent="."]
-=======
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
->>>>>>> b4f1820d038052d6fb6b04e1d3dafe5868f3cf6f
 layout_mode = 1
-anchors_preset = 8
+anchors_preset = 13
 anchor_left = 0.5
-anchor_top = 0.5
 anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -227.5
-offset_top = -247.0
-offset_right = 227.5
-offset_bottom = 247.0
+anchor_bottom = 1.0
+offset_left = -302.5
+offset_right = 302.5
 grow_horizontal = 2
 grow_vertical = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
+theme_override_constants/separation = 25
 alignment = 1
 
-<<<<<<< HEAD
 [node name="logo" type="Label" parent="buttons"]
 layout_mode = 2
-size_flags_vertical = 3
-theme_override_font_sizes/font_size = 64
-=======
-[node name="Label" type="Label" parent="VBoxContainer"]
-layout_mode = 2
-size_flags_vertical = 3
-theme = ExtResource("2_44b36")
->>>>>>> b4f1820d038052d6fb6b04e1d3dafe5868f3cf6f
-text = "Cubedise 2D"
+size_flags_vertical = 1
+theme_override_font_sizes/font_size = 96
+text = "CUBEDISE 2D"
 horizontal_alignment = 1
 vertical_alignment = 1
-uppercase = true
 
-<<<<<<< HEAD
 [node name="new_game" type="Button" parent="buttons"]
 layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 3
 theme_type_variation = &"FlatButton"
-theme_override_font_sizes/font_size = 48
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 64
 text = "New game"
+
+[node name="select_level" type="Button" parent="buttons"]
+layout_mode = 2
+theme_type_variation = &"FlatButton"
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 64
+text = "Select Level"
 
 [node name="quit" type="Button" parent="buttons"]
 layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 3
 theme_type_variation = &"FlatButton"
-theme_override_font_sizes/font_size = 48
-text = "Quit"
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 64
+text = "Quit
+"
 
-[node name="bottom" type="MarginContainer" parent="."]
-=======
-[node name="Button" type="Button" parent="VBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 3
-theme = ExtResource("2_44b36")
-theme_type_variation = &"FlatButton"
-text = "New game"
-
-[node name="Button3" type="Button" parent="VBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 3
-theme = ExtResource("2_44b36")
-theme_type_variation = &"FlatButton"
-text = "Select Level"
-
-[node name="Button4" type="Button" parent="VBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 3
-theme = ExtResource("2_44b36")
-theme_type_variation = &"FlatButton"
-text = "Options"
-
-[node name="Button5" type="Button" parent="VBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 3
-theme = ExtResource("2_44b36")
-theme_type_variation = &"FlatButton"
-text = "Contact Us"
-
-[node name="Button2" type="Button" parent="VBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 3
-theme = ExtResource("2_44b36")
-theme_type_variation = &"FlatButton"
-text = "Quit"
-
-[node name="MarginContainer" type="MarginContainer" parent="."]
->>>>>>> b4f1820d038052d6fb6b04e1d3dafe5868f3cf6f
-layout_mode = 1
-anchors_preset = 12
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_top = -58.0
-grow_horizontal = 2
-grow_vertical = 0
-theme_override_constants/margin_left = 8
-theme_override_constants/margin_right = 8
-
-<<<<<<< HEAD
-[node name="ver" type="Label" parent="bottom"]
-layout_mode = 2
-size_flags_horizontal = 8
-size_flags_vertical = 8
-theme = SubResource("Theme_rvycm")
-=======
-[node name="Label2" type="Label" parent="MarginContainer"]
-layout_mode = 2
-size_flags_horizontal = 8
-size_flags_vertical = 8
-theme = ExtResource("2_44b36")
->>>>>>> b4f1820d038052d6fb6b04e1d3dafe5868f3cf6f
-theme_override_font_sizes/font_size = 36
-text = "ver. 0.0.0"
-horizontal_alignment = 2
-vertical_alignment = 2
-
-<<<<<<< HEAD
-[node name="lang" type="Button" parent="bottom"]
-layout_mode = 2
-size_flags_horizontal = 0
-size_flags_vertical = 8
-theme = SubResource("Theme_rvycm")
-=======
-[node name="Button6" type="Button" parent="MarginContainer"]
-layout_mode = 2
-size_flags_horizontal = 0
-size_flags_vertical = 8
-theme = ExtResource("2_44b36")
->>>>>>> b4f1820d038052d6fb6b04e1d3dafe5868f3cf6f
-theme_type_variation = &"FlatButton"
-theme_override_font_sizes/font_size = 36
-text = "ENG"
-alignment = 0
-
-<<<<<<< HEAD
 [connection signal="pressed" from="buttons/new_game" to="." method="_on_new_game_pressed"]
+[connection signal="pressed" from="buttons/select_level" to="." method="_on_select_level_pressed"]
 [connection signal="pressed" from="buttons/quit" to="." method="_on_quit_pressed"]
-=======
-[connection signal="pressed" from="VBoxContainer/Button" to="." method="_on_button_pressed"]
-[connection signal="pressed" from="VBoxContainer/Button2" to="." method="_on_button_2_pressed"]
->>>>>>> b4f1820d038052d6fb6b04e1d3dafe5868f3cf6f

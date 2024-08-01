@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://crmrv3gs41vor"]
+[gd_scene load_steps=8 format=3 uid="uid://crmrv3gs41vor"]
 
 [ext_resource type="Texture2D" uid="uid://mlyxo1s5eu5c" path="res://assets/player.png" id="2_vk5xg"]
 [ext_resource type="Texture2D" uid="uid://v7defs4bo5si" path="res://assets/arrow.png" id="3_su5ou"]
@@ -80,14 +80,6 @@ func _process(delta):
 	]
 "
 
-[sub_resource type="Gradient" id="Gradient_iuqu7"]
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_2tt0w"]
-gradient = SubResource("Gradient_iuqu7")
-width = 800
-height = 1800
-fill_to = Vector2(0, 1)
-
 [node name="player" type="CharacterBody2D"]
 script = SubResource("GDScript_skxay")
 
@@ -95,7 +87,7 @@ script = SubResource("GDScript_skxay")
 shape = SubResource("CapsuleShape2D_6qysq")
 
 [node name="sprite" type="Sprite2D" parent="."]
-modulate = Color(0.88, 0.88, 0.88, 1)
+modulate = Color(0.84, 0.84, 0.84, 1)
 scale = Vector2(0.25, 0.255)
 texture = ExtResource("2_vk5xg")
 
@@ -182,13 +174,3 @@ theme_override_constants/line_spacing = -4
 theme_override_font_sizes/font_size = 16
 text = "debug text"
 script = SubResource("GDScript_ummhs")
-
-[node name="ParallaxBackground" type="ParallaxBackground" parent="."]
-follow_viewport_scale = 0.95
-scroll_limit_begin = Vector2(0, -600)
-scroll_limit_end = Vector2(0, 1200)
-
-[node name="Sprite2D" type="Sprite2D" parent="ParallaxBackground"]
-position = Vector2(0, 327.5)
-scale = Vector2(9.07813, 20.6094)
-texture = SubResource("GradientTexture2D_2tt0w")
