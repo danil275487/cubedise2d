@@ -87,7 +87,6 @@ script = SubResource("GDScript_skxay")
 shape = SubResource("CapsuleShape2D_6qysq")
 
 [node name="sprite" type="Sprite2D" parent="."]
-modulate = Color(0.84, 0.84, 0.84, 1)
 scale = Vector2(0.25, 0.255)
 texture = ExtResource("2_vk5xg")
 

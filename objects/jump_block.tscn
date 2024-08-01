@@ -1,9 +1,8 @@
-[gd_scene load_steps=8 format=3 uid="uid://clkcg1hko77ai"]
+[gd_scene load_steps=9 format=3 uid="uid://clkcg1hko77ai"]
 
 [ext_resource type="Texture2D" uid="uid://cb85prudheun8" path="res://assets/cube.png" id="1_ujxm2"]
 
 [sub_resource type="Gradient" id="Gradient_0pyit"]
-interpolation_mode = 2
 colors = PackedColorArray(1, 1, 1, 1, 0.964706, 0.964706, 0.964706, 0)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_co3ec"]
@@ -17,8 +16,8 @@ fill_to = Vector2(0.2, 0.2)
 metadata/_snap_enabled = true
 
 [sub_resource type="Gradient" id="Gradient_ejorp"]
-offsets = PackedFloat32Array(0.4, 0.6)
-colors = PackedColorArray(0.5, 1.5, 0.5, 1, 0.501961, 1.50196, 0.501961, 0)
+offsets = PackedFloat32Array(0.2, 0.8)
+colors = PackedColorArray(0.25, 1.5, 0.25, 1, 0.25098, 1.50196, 0.25098, 0)
 metadata/_snap_enabled = true
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_dpiyw"]
@@ -39,13 +38,17 @@ metadata/_snap_enabled = true
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_jc2ur"]
 size = Vector2(64, 64)
 
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_rkybp"]
+light_mode = 1
+
 [node name="jump_block" type="StaticBody2D"]
 
 [node name="light" type="PointLight2D" parent="."]
-color = Color(0.5, 1.5, 0.5, 1)
+color = Color(0.25, 1.5, 0.25, 1)
+blend_mode = 2
 shadow_enabled = true
 shadow_filter = 2
-shadow_filter_smooth = 8.0
+shadow_filter_smooth = 2.0
 texture = SubResource("GradientTexture2D_co3ec")
 texture_scale = 12.0
 
@@ -66,6 +69,7 @@ scale_amount_curve = SubResource("Curve_3lvne")
 shape = SubResource("RectangleShape2D_jc2ur")
 
 [node name="sprite" type="Sprite2D" parent="."]
-modulate = Color(0.5, 1.5, 0.5, 1)
+modulate = Color(0.25, 1.5, 0.25, 1)
+material = SubResource("CanvasItemMaterial_rkybp")
 scale = Vector2(0.25, 0.25)
 texture = ExtResource("1_ujxm2")

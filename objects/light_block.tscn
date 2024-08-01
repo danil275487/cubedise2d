@@ -1,15 +1,14 @@
-[gd_scene load_steps=8 format=3 uid="uid://7jawtavkrjq4"]
+[gd_scene load_steps=9 format=3 uid="uid://7jawtavkrjq4"]
 
 [ext_resource type="Texture2D" uid="uid://cb85prudheun8" path="res://assets/cube.png" id="1_k80rw"]
 
 [sub_resource type="Gradient" id="Gradient_0pyit"]
-interpolation_mode = 2
 colors = PackedColorArray(1, 1, 1, 1, 0.964706, 0.964706, 0.964706, 0)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_co3ec"]
 gradient = SubResource("Gradient_0pyit")
-width = 32
-height = 32
+width = 48
+height = 48
 use_hdr = true
 fill = 1
 fill_from = Vector2(0.5, 0.5)
@@ -17,14 +16,15 @@ fill_to = Vector2(0.2, 0.2)
 metadata/_snap_enabled = true
 
 [sub_resource type="Gradient" id="Gradient_ejorp"]
-offsets = PackedFloat32Array(0.4, 0.6)
-colors = PackedColorArray(1.5, 1.5, 1.5, 1, 0.501961, 1.50196, 0.501961, 0)
+offsets = PackedFloat32Array(0.2, 0.8)
+colors = PackedColorArray(1.5, 1.5, 1.5, 1, 1.5, 1.5, 1.5, 0)
 metadata/_snap_enabled = true
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_dpiyw"]
 gradient = SubResource("Gradient_ejorp")
 width = 16
 height = 16
+use_hdr = true
 fill = 1
 fill_from = Vector2(0.5, 0.5)
 fill_to = Vector2(0, 0.1)
@@ -39,16 +39,20 @@ metadata/_snap_enabled = true
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_jc2ur"]
 size = Vector2(64, 64)
 
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_du4x7"]
+light_mode = 1
+
 [node name="light_block" type="StaticBody2D"]
 
 [node name="light" type="PointLight2D" parent="."]
-color = Color(1.5, 1.5, 1.5, 1)
-energy = 2.0
+color = Color(4, 4, 4, 1)
+energy = 1.5
+blend_mode = 2
 shadow_enabled = true
 shadow_filter = 2
-shadow_filter_smooth = 8.0
+shadow_filter_smooth = 2.0
 texture = SubResource("GradientTexture2D_co3ec")
-texture_scale = 16.0
+texture_scale = 12.0
 
 [node name="particles" type="CPUParticles2D" parent="."]
 amount = 50
@@ -68,5 +72,6 @@ shape = SubResource("RectangleShape2D_jc2ur")
 
 [node name="sprite" type="Sprite2D" parent="."]
 modulate = Color(1.5, 1.5, 1.5, 1)
+material = SubResource("CanvasItemMaterial_du4x7")
 scale = Vector2(0.25, 0.25)
 texture = ExtResource("1_k80rw")
