@@ -12,60 +12,81 @@ script/source = "@tool
 extends StaticBody2D
 
 const cube = preload('res://assets/cube.png')
+var no_lighting = CanvasItemMaterial.new()
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func add_sprites():
+# adds all the children (sprites and light occluders)
+func add_children():
 	for child in get_children():
-		if child.get_child_count() == 0:
+		if child.get_child_count() == 0: # if no children add new
 			child.add_child(Sprite2D.new())
-		elif child.get_child_count() > 2:
+			child.add_child(LightOccluder2D.new())
+		elif child.get_child_count() > 2: # too many children, remove all
 			print('removing too many children')
 			for child2 in child.get_children():
 				child.remove_child(child2)
-		else:
+		else: # ignore if has 2 children
 			pass
 
-
+# updates all sprites (size n stuff ykw)
 func update_sprites():
 	for child in get_children():
 		var sprite = child.get_child(0)
 		var rect = child.shape.get_rect()
-		
-		sprite.scale = Vector2(0.25, 0.25)
+		sprite.scale = Vector2(0.25, 0.25) # downscale the sprite to accomodate for the images size
 		sprite.texture = cube
 		sprite.texture_repeat = CanvasItem.TEXTURE_REPEAT_ENABLED
-		
-		if child.disabled:
-			sprite.modulate = Color(0.4, 0.4, 0.4)
-		elif child.one_way_collision:
-			sprite.modulate = Color(0.7, 0.7, 0.7)
-		else:
+		if child.disabled: # background
+			sprite.modulate = Color(0.3, 0.3, 0.3)
+			sprite.material = sprite.property_get_revert('material')
+			Sprite2D.new().light_mask = 1
+		elif child.one_way_collision: # platform
+			sprite.modulate = Color(0.5, 0.5, 0.5)
+			sprite.material = sprite.property_get_revert('material')
+			Sprite2D.new().light_mask = 2 # i can be casted onto
+		else: # normal
 			sprite.modulate = Color(1, 1, 1)
-		
+			no_lighting.light_mode = CanvasItemMaterial.LIGHT_MODE_UNSHADED # shadows dont affect me
+			sprite.material = no_lighting
+			Sprite2D.new().light_mask = 1
 		sprite.region_enabled = true
-		sprite.region_rect = Rect2(Vector2(0, 0), rect.size*4)
+		sprite.region_rect = Rect2(Vector2.ZERO, rect.size*4)
 
 func update_occluders():
-	pass
+	for child in get_children():
+		var occluder = child.get_child(1)
+		var rect = child.shape.get_rect()
+		var polygon = OccluderPolygon2D.new()
+		occluder.clip_children = CanvasItem.CLIP_CHILDREN_ONLY
+		if not child.disabled:
+			polygon.polygon = PackedVector2Array([
+				rect.position,
+				Vector2(rect.position.x, rect.end.y),
+				rect.end,
+				Vector2(rect.end.x, rect.position.y)
+			])
+			occluder.occluder = polygon
+
 
 func _on_child_order_changed():
-	add_sprites()
+	add_children()
 
 func _ready():
-	add_sprites()
+	add_children()
 	update_sprites()
+	update_occluders()
 
 func _process(delta):
 	if Engine.is_editor_hint():
-		add_sprites()
+		add_children()
 		update_sprites()
+		update_occluders()
 "
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_uhru3"]
-size = Vector2(960, 256)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_a2ehk"]
 size = Vector2(768, 384)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_uhru3"]
+size = Vector2(960, 256)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ldt02"]
 size = Vector2(448, 128)
@@ -166,7 +187,7 @@ tonemap_exposure = 0.5
 glow_enabled = true
 glow_levels/5 = 0.0
 glow_strength = 2.0
-glow_blend_mode = 0
+glow_blend_mode = 1
 glow_hdr_threshold = 1.7
 glow_map = SubResource("GradientTexture2D_mocpw")
 
@@ -176,14 +197,14 @@ glow_map = SubResource("GradientTexture2D_mocpw")
 material = SubResource("CanvasItemMaterial_80dgm")
 script = SubResource("GDScript_2pwwx")
 
-[node name="background" type="CollisionShape2D" parent="blocks"]
-position = Vector2(416, 0)
-shape = SubResource("RectangleShape2D_uhru3")
-disabled = true
-
 [node name="background5" type="CollisionShape2D" parent="blocks"]
 position = Vector2(4224, 688)
 shape = SubResource("RectangleShape2D_a2ehk")
+disabled = true
+
+[node name="background" type="CollisionShape2D" parent="blocks"]
+position = Vector2(416, 0)
+shape = SubResource("RectangleShape2D_uhru3")
 disabled = true
 
 [node name="background4" type="CollisionShape2D" parent="blocks"]
@@ -376,16 +397,6 @@ modulate = Color(0.95, 0.95, 0.95, 1)
 position = Vector2(507, 12)
 floor_max_angle = 0.523599
 
-[node name="CanvasModulate" type="CanvasModulate" parent="."]
-color = Color(0.5, 0.5, 0.5, 1)
-
-[node name="DirectionalLight2D" type="DirectionalLight2D" parent="."]
-rotation = 0.174533
-blend_mode = 2
-shadow_enabled = true
-shadow_filter = 2
-shadow_filter_smooth = 1.0
-
 [node name="jump_block" parent="." instance=ExtResource("2_q6247")]
 position = Vector2(6368, 80)
 
@@ -397,3 +408,21 @@ position = Vector2(8000, 656)
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_eduo2")
+
+[node name="CanvasModulate" type="CanvasModulate" parent="."]
+light_mask = 2
+color = Color(0.74558, 0.74558, 0.74558, 1)
+
+[node name="DirectionalLight2D" type="DirectionalLight2D" parent="."]
+rotation = 0.174533
+shadow_enabled = true
+shadow_filter = 2
+shadow_filter_smooth = 1.0
+
+[node name="DirectionalLight2D2" type="DirectionalLight2D" parent="."]
+rotation = 0.174533
+energy = 0.5
+shadow_enabled = true
+shadow_filter = 2
+shadow_filter_smooth = 1.0
+shadow_item_cull_mask = 2
